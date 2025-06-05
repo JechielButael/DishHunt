@@ -24,8 +24,8 @@ export default function MealDetails() {
     );
 
   return (
-    <div className="bg-[#3b3434] min-h-screen flex items-center justify-center p-4">
-      <div className="p-4 max-w-md bg-white shadow-md rounded-xl w-full">
+    <div className="bg-gradient-to-r from-gray-500 to-red-600 min-h-screen flex items-center justify-center p-4">
+      <div className="p-4 max-w-md bg-[#e7ddd1] shadow-md rounded-xl w-full">
         <div className="p-1 font-bold transition-transform hover:translate-x-1">
           <button onClick={() => router.back()}>← Back</button>
         </div>

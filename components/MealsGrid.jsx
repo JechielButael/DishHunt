@@ -54,7 +54,7 @@ const MealsGrid = ({ initialMeals, initialCategories, initialAreas }) => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-r from-gray-500 to-red-600">
-      <h1 className="text-xl text-[#e7ddd1] font-edu  p-8">DishHunt</h1>
+      <h1 className="text-xl text-[#e7ddd1] font-edu p-8">DishHunt</h1>
 
       {/* Search Input & Button */}
       <div className="flex justify-center px-4 mb-4">
