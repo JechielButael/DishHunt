@@ -17,14 +17,16 @@ const MealsGrid = ({ initialMeals, initialCategories, initialAreas }) => {
   const meals = useSelector(selectMeals);
 
   const fetchMeals = async () => {
-    axios
-      .get(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`)
-      .then((res) => {
-        dispatch(setMeals(res.data.meals));
-      })
-      .catch((err) => {
-        console.error("Error fetching meals: ", err);
-      });
+    try {
+      const res = await axios.get(
+        `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`
+      );
+      const fetchedMeals = res.data.meals || [];
+      dispatch(setMeals(fetchedMeals));
+    } catch (err) {
+      console.error("Error fetching meals: ", err);
+      dispatch(setMeals([]));
+    }
   };
 
   useEffect(() => {
@@ -51,14 +53,12 @@ const MealsGrid = ({ initialMeals, initialCategories, initialAreas }) => {
   });
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#3b3434]">
-      <h1 className="text-6xl text-white font-edu  text-center p-8">
-        DishHunt
-      </h1>
+    <div className="flex flex-col min-h-screen bg-gradient-to-r from-gray-500 to-red-600">
+      <h1 className="text-xl text-[#e7ddd1] font-edu  p-8">DishHunt</h1>
 
       {/* Search Input & Button */}
       <div className="flex justify-center px-4 mb-4">
-        <div className="flex items-center border border-gray-300 rounded-full overflow-hidden bg-white w-full max-w-md">
+        <div className="flex items-center border border-gray-300 focus-within:border-blue-600 rounded-full overflow-hidden bg-[#e2d3c1] w-full max-w-md">
           <input
             type="text"
             value={searchTerm}
@@ -77,9 +77,9 @@ const MealsGrid = ({ initialMeals, initialCategories, initialAreas }) => {
       </div>
 
       {/* Filters Row (New Line) */}
-      <div className="flex flex-wrap mt-3 justify-center gap-4 px-4 mb-8">
+      <div className="flex flex-wrap mt-3  justify-center gap-4 px-4 mb-8">
         <select
-          className="border-none text-[#808080] focus:outline-none bg-white border border-black rounded-full px-4 py-2"
+          className="border-none text-[#606060] focus:outline-none bg-[#e7ddd1] border border-black rounded-full px-4 py-2"
           name="categories"
           onChange={(e) => setSelectedCategory(e.target.value)}
           value={selectedCategory}
@@ -93,7 +93,7 @@ const MealsGrid = ({ initialMeals, initialCategories, initialAreas }) => {
         </select>
 
         <select
-          className="border-none text-[#808080] focus:outline-none bg-white border border-black rounded-full px-4 py-2"
+          className="border-none text-[#606060] focus:outline-none bg-[#e7ddd1] border border-black rounded-full px-4 py-2"
           name="area"
           onChange={(e) => setSelectedArea(e.target.value)}
           value={selectedArea}
@@ -107,7 +107,7 @@ const MealsGrid = ({ initialMeals, initialCategories, initialAreas }) => {
         </select>
 
         <select
-          className="border-none text-[#808080] focus:outline-none bg-white border border-black rounded-full px-4 py-2"
+          className="border-none text-[#606060] focus:outline-none bg-[#e7ddd1] border border-black rounded-full px-4 py-2"
           name="sort"
           onChange={(e) => setSortOrder(e.target.value)}
           value={sortOrder}
@@ -118,11 +118,15 @@ const MealsGrid = ({ initialMeals, initialCategories, initialAreas }) => {
         </select>
       </div>
 
+      {sortedMeals.length === 0 && (
+        <p className="text-white text-center text-lg mt-6">No meals found</p>
+      )}
+
       {/* Meals Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 p-4">
         {sortedMeals.map((meal) => (
           <Link href={`/meal/${meal.idMeal}`} key={meal.idMeal}>
-            <div className="bg-white shadow-md rounded-xl overflow-hidden hover:scale-105 transition duration-300 ease-in-out">
+            <div className="bg-[#e7ddd1] shadow-md rounded-xl overflow-hidden hover:scale-105 transition duration-300 ease-in-out">
               <img
                 className="w-full h-48 object-cover"
                 src={meal.strMealThumb}
